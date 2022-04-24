@@ -14,26 +14,33 @@ class TuringMachine:
                 'move': move,
                 'out_state': out_state
             }
-        self.line = ['0']
+        self._line = []
         self.pointer = 0
 
+    @property
+    def line(self):
+        return ''.join(self._line), self.pointer
+
     def step(self):
-        step = self.configuration[f'{self.state} {self.line[self.pointer]}']
-        self.line[self.pointer] = step['out_cell']
+        step = self.configuration[f'{self.state} {self._line[self.pointer]}']
+        self._line[self.pointer] = step['out_cell']
         self.pointer += letter2move[step['move']]
         self.state = step['out_state']
 
-        if self.pointer == len(self.line):
-            self.line.append('0')
+        if self.pointer == len(self._line):
+            self._line.append('0')
 
         if self.pointer < 0:
-            self.line = ['0'] + self.line
+            self._line = ['0'] + self._line
             self.pointer = 0
 
-    def execute(self, word, initial_point=0):
+    def execute(self, word, initial_point=0, existing__line=False):
+        if not existing__line:
+            self._line = []
+
         counter = 0
-        self.pointer = len(self.line) + initial_point
-        self.line += list(word)
+        self.pointer = len(self._line) + initial_point
+        self._line += list(word)
         self.state = 'q1'
 
         while True:
