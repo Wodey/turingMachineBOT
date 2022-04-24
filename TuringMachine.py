@@ -19,10 +19,17 @@ class TuringMachine:
 
     @property
     def line(self):
+        i = self._line[0]
+        while i != '1' and self.pointer != 0:
+            self._line.pop(0)
+            self.pointer -= 1
+            i = self._line[0]
         return ''.join(self._line), self.pointer
 
     def step(self):
-        step = self.configuration[f'{self.state} {self._line[self.pointer]}']
+        step = self.configuration.get(f'{self.state} {self._line[self.pointer]}', -1)
+        if step == -1:
+            return
         self._line[self.pointer] = step['out_cell']
         self.pointer += letter2move[step['move']]
         self.state = step['out_state']
@@ -43,8 +50,7 @@ class TuringMachine:
         self._line += list(word)
         self.state = 'q1'
 
-        while True:
-            self.step()
+        while True and self.step() != -1:
             counter += 1
 
             if self.state == 'q0':
