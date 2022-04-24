@@ -1,16 +1,17 @@
-# This is a sample Python script.
+from TuringMachine import TuringMachine
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+inp = ['q1 0 q1 0 R', 'q1 1 q2 0 R', 'q2 1 q1 0 R', 'q2 0 q0 1 S']
 
+tm = TuringMachine(inp)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+word = '1110'
+if (c := tm.execute(word)) == -1:
+    print(f'Слово {word} невыполнимо')
 
+print(tm.line)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+word = '110111'
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+print(tm.execute(word, 4) == -1)
+
+print(tm.line)
